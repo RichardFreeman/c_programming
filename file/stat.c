@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 
     char path[100];
     struct stat buf;
+    mode_t modes;
 
     printf("Please input your file path:\n");
     scanf("%s", path);
@@ -19,6 +20,8 @@ int main(int argc, char *argv[])
     {
         printf("The path is not correct!");
     }
+
+    modes = buf.st_mode;
 
     printf("file size: %lld\n",  buf.st_size);
     printf("device number: %d\n", buf.st_dev);
@@ -33,6 +36,9 @@ int main(int argc, char *argv[])
         printf("file type is regular\n");
     else if(S_ISDIR(buf.st_mode))
         printf("file type is directory\n");
+
+    if(!S_ISDIR(modes) && (modes & S_IRWXU) == S_IXUSR)
+        printf("file persion model: %d", buf.st_mode);
 
     return(0);
 }
